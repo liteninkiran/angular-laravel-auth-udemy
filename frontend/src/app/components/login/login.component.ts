@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -14,17 +14,23 @@ export class LoginComponent implements OnInit {
         password: null,
     };
 
+    public error = null;
+
     constructor(private http: HttpClient) { }
 
     ngOnInit(): void {
     }
 
     public onSubmit() {
-        const url = 'http://localhost:8000/login';
+        const url = 'http://localhost:8000/api/login';
         return this.http.post(url, this.form).subscribe(
             data => console.log(data),
-            error => console.log(error),
+            error => this.handleError(error),
         );
+    }
+
+    public handleError(error: HttpErrorResponse) {
+        this.error = error.error.error;
     }
 
 }
